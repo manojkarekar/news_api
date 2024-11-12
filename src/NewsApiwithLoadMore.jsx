@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./NewsApi.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 export const NewsApiWithLoadMore = () => {
     const [apiData, setApiData] = useState([]);
@@ -69,7 +70,7 @@ export const NewsApiWithLoadMore = () => {
                                 <h4 className="title">{data.title}</h4>
                                 <img src={data.urlToImage} height="200px" alt="" className="Img" />
                                 <p className="Description">{data.description}</p>
-                                <a href={data.url} target="_blank" rel="noopener noreferrer">
+                                <a href={data.url} target="_parent" rel="noopener noreferrer">
                                     <button className="ReadMore">
                                         <FontAwesomeIcon icon={faEye} />
                                     </button>
@@ -83,10 +84,11 @@ export const NewsApiWithLoadMore = () => {
 
 
             {articlesToShow < apiData.length && (
-                <div className="load-more-container">
-                    <button onClick={loadMoreHandler} className="LM">Load More</button>
-                </div>
+                
+                    <button onClick={loadMoreHandler} className="LM"><FontAwesomeIcon icon={faCirclePlus} /></button>
+                
             )}
+            <br /><br />
         </>
     );
 };

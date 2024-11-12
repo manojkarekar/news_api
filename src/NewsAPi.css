@@ -103,6 +103,21 @@ body {
     color: white;
 }
 
+.LM{
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+    align-items: center;
+    background-color: darkcyan;
+    width: 55px;
+    height: 55px;
+    font-size: 45px;
+    color: white;
+    border-radius: 50%;
+    border: none;
+    
+}
+
 
 
 @media screen and (max-width:768px) {
@@ -179,12 +194,6 @@ body {
         width: 98%;
         justify-content: center;
         flex-direction: column;
-    }
-
-    .LM {
-        display: flex;
-        justify-self: center;
-        border: 2px solid black;
     }
 
     .ReadMore{
