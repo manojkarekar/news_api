@@ -9,40 +9,41 @@ export const NewsApiWithLoadMore = () => {
     const [zone, setZone] = useState("india");
     const [articlesToShow, setArticlesToShow] = useState(20);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+
     const api_key = "dcada234e81447a29180b187c98ce73c";
     const today = new Date();
-    const date = today.getDate();
+    const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-    // Function to fetch news
     const fetchNews = async (query) => {
+        setLoading(true);
         try {
-            const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&from=${date}&sortBy=publishedAt&apiKey=${api_key}&units=metric`);
+            const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&from=${date}&sortBy=publishedAt&apiKey=${api_key}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch news");
             }
             const data = await response.json();
-            setApiData(data.articles || []);  // Set an empty array if articles are undefined
-            setError(null); // Clear any previous error
+            setApiData(data.articles || []);
+            setError(null);
         } catch (err) {
             console.error(err);
             setError("Failed to load news articles.");
-            setApiData([]);  // Clear data if there’s an error
+            setApiData([]);
+        } finally {
+            setLoading(false);
         }
     };
 
-    // Fetch default news when component mounts
     useEffect(() => {
         fetchNews(zone);
     }, []);
 
-    // Handle form submission
     const searchNewsHandler = async (event) => {
         event.preventDefault();
         fetchNews(zone);
         setArticlesToShow(20);
     };
 
-    // Handle "Load More" button click
     const loadMoreHandler = () => {
         setArticlesToShow(prevArticlesToShow => prevArticlesToShow + 20);
     };
@@ -67,7 +68,9 @@ export const NewsApiWithLoadMore = () => {
             </div>
 
             <section className="content">
-                {error ? (
+                {loading ? (
+                    <p>Loading...</p>
+                ) : error ? (
                     <p className="error-message">{error}</p>
                 ) : (
                     apiData.slice(0, articlesToShow).map((data) => (
@@ -87,7 +90,7 @@ export const NewsApiWithLoadMore = () => {
                 )}
             </section>
 
-            {articlesToShow < apiData.length && !error && (
+            {articlesToShow < apiData.length && !error && !loading && (
                 <button onClick={loadMoreHandler} className="LM">
                     <FontAwesomeIcon icon={faCirclePlus} />
                 </button>
